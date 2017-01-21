@@ -16,6 +16,7 @@ Virtual node modification
 Run the makeConpotNode.sh with: 
 
 	$ cd vroot-linux/
+
 	vroot-linux$ sudo bash makeConpotNode.sh user-gmail user-password
 
 Where user-gmail and user-password is the gmail address you want to recieve notifications to and it's password.
