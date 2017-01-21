@@ -107,9 +107,6 @@ else
 	# connected to the external connection node
 
 	ip route add 10.0.0.0/16 via "$interfaceIn"
-	echo "$interfaceIn"
-	echo "$interfaceOut"
-	echo "$conpotTemplate"
 
 	######### Packet forwarding ##########
 	# packets are forwarded to and from eth0 interface to the virtual network
@@ -133,14 +130,13 @@ else
 	for i in ${conpot_pc_array[*]};
 	do
 
-		echo "$i"
 		######### DNS server IP address ##########
 		# resolv.conf contains the IP address of a DNS server and is copied to the 
 		# ect folder to the virtual nodes
 
 		hcp resolv.conf $i:/etc/
 
-		### modify default conpot configuration ports
+		### modify conpot template ports
 		for j in "${!protocols_port_array[@]}";
 		do 
 			himage "$i" sed -i "s/port=\"${protocols_port_default_array[$j]}\"/port=\"${protocols_port_array[$j]}\"/" /usr/local/lib/python2.7/dist-packages/conpot/templates/"$conpotTemplate"/"${protocols_array[$j]}"/"${protocols_array[$j]}".xml
@@ -162,15 +158,15 @@ else
 
 	done
 
+	# ip address ot the eth0 interface
 	outIP=`ip addr show eth0 | awk '$1 == "inet" {gsub(/\/.*$/, "", $2); print $2}'`
-	echo "$outIP"
 
+	# requests forwarded from pc's ports to the conpot nodes ports
 	for i in ${forwarded_IP_array[*]};
 	do 
 		for j in "${!forward_array[@]}";
 		do 
 
-		echo "$i : ${forward_array[$j]} --> $outIP : ${forward_array[$j]}"
 		iptables -t nat -A PREROUTING -p tcp -d "$outIP" --dport "${forward_array[$j]}" -j DNAT --to-destination "$i":"${forward_array[$j]}"
 
 		forward_array[$j]=$((${forward_array[$j]}+1))
