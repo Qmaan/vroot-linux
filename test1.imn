@@ -1,7 +1,7 @@
 node n0 {
     type pc
     network-config {
-	hostname pc1
+	hostname plc1
 	!
 	interface eth0
 	 ip address 10.0.0.20/24
@@ -46,7 +46,7 @@ node n0 {
 node n1 {
     type pc
     network-config {
-	hostname pc2
+	hostname plc2
 	!
 	interface eth0
 	 ip address 10.0.1.20/24

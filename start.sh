@@ -79,7 +79,7 @@ done
 
 ### show the help message or execute the topology startup
 
-if [ "$show_help" = true ] || [ "$topology_file_defined" = false ] ; then
+if [ "$show_help" = true -o "$topology_file_defined" = false ] ; then
 
 	echo 'Use start.sh to start a topology with conpot nodes:
 
@@ -136,13 +136,17 @@ else
 
 		hcp resolv.conf $i:/etc/
 
+		himage "$i" sed -i "s/88111222/S C-X1TB98822009/" /usr/local/lib/python2.7/dist-packages/conpot/templates/"$conpotTemplate"/template.xml
+		himage "$i" sed -i "s/Siemens, SIMATIC, S7-200/CPU-Pump/" /usr/local/lib/python2.7/dist-packages/conpot/templates/"$conpotTemplate"/template.xml
+		himage "$i" sed -i "s/Technodrome/SIMATIC 200/" /usr/local/lib/python2.7/dist-packages/conpot/templates/"$conpotTemplate"/template.xml
+
 		### modify conpot template ports
 		for j in "${!protocols_port_array[@]}";
 		do 
 			himage "$i" sed -i "s/port=\"${protocols_port_default_array[$j]}\"/port=\"${protocols_port_array[$j]}\"/" /usr/local/lib/python2.7/dist-packages/conpot/templates/"$conpotTemplate"/"${protocols_array[$j]}"/"${protocols_array[$j]}".xml
 			
 			#increase ports by 1
-			protocols_port_array[$j]=$((${protocols_port_array[$j]}+1))
+			protocols_port_array[$j]=$((${protocols_port_array[$j]}+10000))
 		done
 		
 
@@ -169,7 +173,7 @@ else
 
 		iptables -t nat -A PREROUTING -p tcp -d "$outIP" --dport "${forward_array[$j]}" -j DNAT --to-destination "$i":"${forward_array[$j]}"
 
-		forward_array[$j]=$((${forward_array[$j]}+1))
+		forward_array[$j]=$((${forward_array[$j]}+10000))
 
 		done
 
