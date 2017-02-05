@@ -135,10 +135,15 @@ else
 		# ect folder to the virtual nodes
 
 		hcp resolv.conf $i:/etc/
+		
+		if [ "$conpotTemplate" = "default" ] ; then
 
 		himage "$i" sed -i "s/88111222/S C-X1TB98822009/" /usr/local/lib/python2.7/dist-packages/conpot/templates/"$conpotTemplate"/template.xml
 		himage "$i" sed -i "s/Siemens, SIMATIC, S7-200/CPU-Pump/" /usr/local/lib/python2.7/dist-packages/conpot/templates/"$conpotTemplate"/template.xml
 		himage "$i" sed -i "s/Technodrome/SIMATIC 200/" /usr/local/lib/python2.7/dist-packages/conpot/templates/"$conpotTemplate"/template.xml
+		himage "$i" sed -i "s/Mouser Factory/Siemens Factory/" /usr/local/lib/python2.7/dist-packages/conpot/templates/"$conpotTemplate"/template.xml
+
+		fi
 
 		### modify conpot template ports
 		for j in "${!protocols_port_array[@]}";
